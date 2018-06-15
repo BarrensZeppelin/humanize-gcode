@@ -20,5 +20,5 @@ setup(name='humanize-gcode',
       packages=['humanize_gcode'],
       scripts=['scripts/hucode'],
       classifiers=(
-            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.6',
       ))
