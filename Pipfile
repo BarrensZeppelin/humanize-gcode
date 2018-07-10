@@ -8,6 +8,7 @@ requests = "*"
 requests-html = "*"
 "e1839a8" = {path = ".", editable = true}
 crayons = "*"
+appdirs = "*"
 
 [dev-packages]
 

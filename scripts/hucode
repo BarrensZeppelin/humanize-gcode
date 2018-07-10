@@ -1,9 +1,13 @@
 #! /usr/bin/env python3.6
 
+import pickle
 import crayons
 import colorama
 
+from os import path, makedirs
 from argparse import ArgumentParser, FileType
+
+from appdirs import AppDirs
 
 from humanize_gcode import load_gcode_flavour, SUPPORTED_FLAVOURS
 
@@ -13,6 +17,7 @@ def gray(s):
 
 
 LONG_EXCLUDED = ('G0', 'G1')
+dirs = AppDirs('humanize_gcode', 'zii')
 
 
 if __name__ == '__main__':
@@ -22,12 +27,25 @@ if __name__ == '__main__':
 	parser.add_argument('file', type=FileType('r'))
 
 	parser.add_argument('--ljust', '-l', type=int, default=30)
+	parser.add_argument('--disable-cache', '-dc', action='store_true')
 
 	args = parser.parse_args()
 
 	try:
-		flavour = load_gcode_flavour(args.flavour)
+		# Cache handling
+		cache_path = path.join(dirs.user_cache_dir, args.flavour)
+		if args.disable_cache or not path.exists(cache_path):
+			flavour = load_gcode_flavour(args.flavour)
+		elif path.exists(cache_path):
+			with open(cache_path, 'rb') as cache:
+				flavour = pickle.load(cache)
 
+		if not args.disable_cache and not path.exists(cache_path):
+			makedirs(dirs.user_cache_dir, exist_ok=True)
+			with open(cache_path, 'wb') as cache:
+				pickle.dump(flavour, cache)
+
+		# Parsing of input file
 		for line in args.file:
 			parts = line.split(';')
 			raw_gcode = parts[0].rstrip()
