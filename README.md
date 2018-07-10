@@ -25,5 +25,4 @@ The package comes with the executable script `hucode` that accepts two arguments
 - More output formats (and possibly customization?)
 - More supported GCode flavours
 - Use command arguments to influence annotation
-- Caching of GCode flavour libraries
 
