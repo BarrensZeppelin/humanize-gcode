@@ -6,13 +6,14 @@ with open('README.md', 'r') as readme:
       long_description = readme.read()
 
 setup(name='humanize-gcode',
-      version='0.0.3',
+      version='0.0.4',
       description='Annotates GCode files with human readable descriptions of commands',
       author='Oskar Haarklou Veileborg',
       author_email='ohv1020@hotmail.com',
       long_description=long_description,
       long_description_content_type='text/markdown',
       url='https://github.com/BarrensZeppelin/humanize-gcode',
+      python_requires='>=3.6',
       install_requires=[
 	      'requests_html',
 	      'crayons',
