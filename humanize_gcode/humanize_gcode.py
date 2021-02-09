@@ -12,12 +12,12 @@ def load_marlin_gcodes():
 
 	d = {}
 
-	for gcode_row in r.html.find('div.gcode-row'):
-		commands, name = gcode_row.find('.meta h1', first=True).text.split(' - ')
-		description = gcode_row.find('i.fa')[-1].text
+	for gcode_row in r.html.find('div.gcode.item'):
+		commands, name = gcode_row.find('h2 > a', first=True).text.split(' - ')
+		description = gcode_row.find('p')[-1].text
 
 		gcode = GCode(name, description=description, long_description='', arguments=[])
-		for com in commands.split(', '):
+		for com in commands.split('-'):
 			d[com] = gcode
 
 	return d
@@ -27,9 +27,12 @@ def load_smoothie_gcodes():
 	d = load_marlin_gcodes()
 
 	session = HTMLSession()
-	r = session.get('http://forum.smoothieware.org/supported-g-codes')
+	r = session.get('http://smoothieware.org/supported-g-codes')
 
-	for row in r.html.find('table.wiki-content-table tr')[1:]:
+	table = r.html.find('table.inline.table.table-striped', first=True)
+	if table is None: return d
+
+	for row in table.find('tr')[1:]:
 		tds = row.find('td')
 		if len(tds) < 2:
 			continue
